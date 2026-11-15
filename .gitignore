@@ -1,0 +1,22 @@
+
+# Java / Maven
+target/
+*.class
+*.log
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Local secrets
+application-local.properties
+application-secret.properties

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>收到的简历 - 用人单位</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-dark bg-success">
+  <div class="container">
+    <span class="navbar-brand">📬 收到的简历</span>
+    <a href="/company/dashboard" class="btn btn-sm btn-light">返回控制台</a>
+  </div>
+</nav>
+<div class="container mt-4">
+  <div th:each="item, iterStat : ${deliveries}" class="card mb-3">
+    <div class="card-header bg-light">
+      <strong th:text="${item.student.name}"></strong> 投递 <strong th:text="${item.delivery.jobTitle}"></strong>
+      <span class="float-end">投递日期：<span th:text="${item.delivery.deliveryDate}"></span></span>
+    </div>
+    <div class="card-body">
+      <h6>学生基本信息</h6>
+      <p>学号：<span th:text="${item.student.studentId}"></span><br>
+        专业：<span th:text="${item.student.major}"></span><br>
+        电话：<span th:text="${item.student.phone}"></span>
+      </p>
+      <hr>
+      <h6>简历内容</h6>
+      <p><strong>教育背景：</strong><br><span th:text="${item.resume?.education}">未填写</span></p>
+      <p><strong>技能：</strong><br><span th:text="${item.resume?.skills}">未填写</span></p>
+      <p><strong>项目经验：</strong><br><span th:text="${item.resume?.experience}">未填写</span></p>
+      <p><strong>自我评价：</strong><br><span th:text="${item.resume?.selfEvaluation}">未填写</span></p>
+      <p><strong>邮箱：</strong><span th:text="${item.resume?.email}">未填写</span></p>
+      <hr>
+      <form method="post" th:action="@{/company/update-delivery-status/{id}(id=${item.delivery.id})}" class="form-inline">
+        <select name="status" class="form-select w-auto d-inline-block">
+          <option value="已投递" th:selected="${item.delivery.status == '已投递'}">已投递</option>
+          <option value="已查看" th:selected="${item.delivery.status == '已查看'}">已查看</option>
+          <option value="已邀请面试" th:selected="${item.delivery.status == '已邀请面试'}">已邀请面试</option>
+          <option value="不合适" th:selected="${item.delivery.status == '不合适'}">不合适</option>
+        </select>
+        <button type="submit" class="btn btn-sm btn-primary ms-2">更新状态</button>
+      </form>
+    </div>
+  </div>
+  <div th:if="${#lists.isEmpty(deliveries)}" class="alert alert-secondary">暂无学生投递简历</div>
+</div>
+</body>
+</html>
